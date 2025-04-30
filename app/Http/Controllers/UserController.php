@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -32,13 +35,27 @@ class UserController extends Controller
             'name' => ['required'],
             'email' => ['required'],
             'password' => ['required'],
-            'role_id' => ['required', 'array'],
+            'profile' => ['nullable', 'file', 'mimes:png,jpg'],
+            // 'role_id' => ['required', 'array'],
         ]);
 
-        // return data user baru di create
-        $user = User::create($validated);
+        if ($request->file('profile')) {
+            // store image to storage
+            $extension = $request->file('profile')->extension();
+            $file_name = Str::random(20) . '.' . $extension;
 
-        $user->roles()->sync([$validated->role_id]);
+            $request->file('profile')->storeAs('users/profile', $file_name);
+        }
+
+        // return data user baru di create
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $request->password,
+            'profile' => $file_name ?? null,
+        ]);
+
+        // $user->roles()->sync([$validated->role_id]);
 
         return response()->json([
             'user' => $user,

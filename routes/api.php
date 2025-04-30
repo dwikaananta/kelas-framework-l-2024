@@ -9,7 +9,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/testing-api', function() {
+Route::get('/testing-api', function () {
     return response()->json([
         'author' => 'Dwika Ananta',
         'type' => 'public',
@@ -21,7 +21,7 @@ Route::get('/testing-api', function() {
     ]);
 });
 
-Route::post('/get-user-name', function(Request $request) {
+Route::post('/get-user-name', function (Request $request) {
     $username = $request->username;
 
     if ($username) {
@@ -37,6 +37,9 @@ Route::post('/get-user-name', function(Request $request) {
 
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('/users', UserController::class);
 });
+
+// ini hanya sementara
+Route::apiResource('/users', UserController::class);
