@@ -44,7 +44,7 @@ class UserController extends Controller
             $extension = $request->file('profile')->extension();
             $file_name = Str::random(20) . '.' . $extension;
 
-            $request->file('profile')->storeAs('users/profile', $file_name);
+            $request->file('profile')->storeAs('users/profile', $file_name, "public");
         }
 
         // return data user baru di create
